@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import * as Icon from 'lucide-react'
 import Image from 'next/image'
+import CardWidget from './card-widget'
 
 export default function Header() {
   return (
@@ -20,12 +21,12 @@ export default function Header() {
           />
         </form>
       </div>
+
       <div className="flex items-center gap-4">
-        <div className="flex items-center gap-2">
-          <Icon.ShoppingCart className="h-5 w-5" />
-          <span className="text-sm">Cart ({0})</span>
-        </div>
+        <CardWidget />
+
         <div className="w-px h-4 bg-zinc-700" />
+
         <Link href="/" className="flex items-center gap-2 hover:underline">
           <span className="text-sm">Account</span>
           <Image
