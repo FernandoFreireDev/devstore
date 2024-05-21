@@ -88,19 +88,19 @@ export default async function ProductPage({ params }: ProductProps) {
           <div className="flex gap-2">
             <button
               type="button"
-              className="flex h-9 w-14 items-center justify-center rounded-full border border-zinc-700 hover:border-zinc-800  bg-zinc-800 hover:bg-zinc-900 text-sm font-semibold"
+              className="flex h-9 w-14 items-center justify-center rounded-full border border-zinc-700 hover:border-zinc-800  bg-zinc-800 hover:bg-zinc-900 duration-300 text-sm font-semibold"
             >
               P
             </button>
             <button
               type="button"
-              className="flex h-9 w-14 items-center justify-center rounded-full border border-zinc-700 hover:border-zinc-800  bg-zinc-800 hover:bg-zinc-900 text-sm font-semibold"
+              className="flex h-9 w-14 items-center justify-center rounded-full border border-zinc-700 hover:border-zinc-800  bg-zinc-800 hover:bg-zinc-900 duration-300 text-sm font-semibold"
             >
               M
             </button>
             <button
               type="button"
-              className="flex h-9 w-14 items-center justify-center rounded-full border border-zinc-700 hover:border-zinc-800  bg-zinc-800 hover:bg-zinc-900 text-sm font-semibold"
+              className="flex h-9 w-14 items-center justify-center rounded-full border border-zinc-700 hover:border-zinc-800  bg-zinc-800 hover:bg-zinc-900 duration-300 text-sm font-semibold"
             >
               G
             </button>

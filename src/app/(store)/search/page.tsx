@@ -1,98 +1,71 @@
+import { api } from '@/data/api'
+import { Product } from '@/interfaces/product'
 import Image from 'next/image'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 
-export default async function Search() {
+interface SearchProps {
+  searchParams: {
+    q: string
+  }
+}
+
+async function searchProducts(query: string): Promise<Product[]> {
+  const response = await api(`/products/search?q=${query}`, {
+    next: {
+      revalidate: 60 * 60, // 1 hour
+    },
+  })
+
+  const products = await response.json()
+
+  return products
+}
+
+export default async function Search({ searchParams }: SearchProps) {
+  const { q: query } = searchParams
+
+  if (!query) {
+    redirect('/')
+  }
+
+  const products = await searchProducts(query)
+
   return (
     <div className="flex flex-col gap-4">
       <p>
-        Resultados para: <span className="font-semibold">moleton</span>
+        Resultados para: <span className="font-semibold">{query}</span>
       </p>
 
       <div className="grid grid-cols-3 gap-6">
-        <Link
-          href={`/product/moletom-never-stop-learning`}
-          className="group relative rounded-lg bg-zinc-900 overflow-hidden flex justify-center items-start"
-          key="1"
-        >
-          <Image
-            src="/moletom-never-stop-learning.png"
-            className="group-hover:scale-105 transition-transform duration-500"
-            alt="Moletom Never Stop Learning"
-            width={480}
-            height={480}
-            quality={100}
-          />
+        {products.map((product) => (
+          <Link
+            href={`/product/${product.slug}`}
+            className="group relative rounded-lg bg-zinc-900 overflow-hidden flex justify-center items-start"
+            key="1"
+          >
+            <Image
+              src={product.image}
+              className="group-hover:scale-105 transition-transform duration-500"
+              alt={product.title}
+              width={480}
+              height={480}
+              quality={100}
+            />
 
-          <div className="absolute bottom-10 right-10 h-12 flex items-center gap-2 max-w-[280px] rounded-full border-2 border-zinc-500 bg-black/60 p-1 pl-5">
-            <span className="text-sm truncate">
-              Moletom Never Stop Learning
-            </span>
-            <span className="flex h-full items-center justify-center rounded-full bg-violet-500 px-4 font-semibold">
-              {Number(129).toLocaleString('pt-BR', {
-                style: 'currency',
-                currency: 'BRL',
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0,
-              })}
-            </span>
-          </div>
-        </Link>
-        <Link
-          href={`/product/moletom-never-stop-learning`}
-          className="group relative rounded-lg bg-zinc-900 overflow-hidden flex justify-center items-start"
-          key="1"
-        >
-          <Image
-            src="/moletom-never-stop-learning.png"
-            className="group-hover:scale-105 transition-transform duration-500"
-            alt="Moletom Never Stop Learning"
-            width={480}
-            height={480}
-            quality={100}
-          />
-
-          <div className="absolute bottom-10 right-10 h-12 flex items-center gap-2 max-w-[280px] rounded-full border-2 border-zinc-500 bg-black/60 p-1 pl-5">
-            <span className="text-sm truncate">
-              Moletom Never Stop Learning
-            </span>
-            <span className="flex h-full items-center justify-center rounded-full bg-violet-500 px-4 font-semibold">
-              {Number(129).toLocaleString('pt-BR', {
-                style: 'currency',
-                currency: 'BRL',
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0,
-              })}
-            </span>
-          </div>
-        </Link>
-        <Link
-          href={`/product/moletom-never-stop-learning`}
-          className="group relative rounded-lg bg-zinc-900 overflow-hidden flex justify-center items-start"
-          key="1"
-        >
-          <Image
-            src="/moletom-never-stop-learning.png"
-            className="group-hover:scale-105 transition-transform duration-500"
-            alt="Moletom Never Stop Learning"
-            width={480}
-            height={480}
-            quality={100}
-          />
-
-          <div className="absolute bottom-10 right-10 h-12 flex items-center gap-2 max-w-[280px] rounded-full border-2 border-zinc-500 bg-black/60 p-1 pl-5">
-            <span className="text-sm truncate">
-              Moletom Never Stop Learning
-            </span>
-            <span className="flex h-full items-center justify-center rounded-full bg-violet-500 px-4 font-semibold">
-              {Number(129).toLocaleString('pt-BR', {
-                style: 'currency',
-                currency: 'BRL',
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0,
-              })}
-            </span>
-          </div>
-        </Link>
+            <div className="absolute bottom-10 right-10 h-12 flex items-center gap-2 max-w-[280px] rounded-full border-2 border-zinc-500 bg-black/60 p-1 pl-5">
+              <span className="text-sm truncate">{product.title}</span>
+              <span className="flex h-full items-center justify-center rounded-full bg-violet-500 px-4 font-semibold">
+                {product.price.toLocaleString('pt-BR', {
+                  style: 'currency',
+                  currency: 'BRL',
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 0,
+                })}
+              </span>
+            </div>
+          </Link>
+        ))}
       </div>
     </div>
   )
